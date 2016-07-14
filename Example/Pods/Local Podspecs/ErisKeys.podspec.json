@@ -1,0 +1,24 @@
+{
+  "name": "ErisKeys",
+  "version": "0.1.0",
+  "summary": "Provides support to generate keys, sign and verify transactions on an Eris Blockchain.",
+  "description": "Provides support to generate keys, sign and verify transactions on an Eris Blockchain. Encapsulates CommonCrypto.",
+  "homepage": "https://gitlab.com/katalysis/ErisKeys",
+  "license": {
+    "type": "Apache License v2.0",
+    "file": "LICENSE"
+  },
+  "authors": {
+    "Alex Tran Qui": "alex@katalysis.io"
+  },
+  "source": {
+    "git": "https://gitlab.com/katalysis/ErisKeys.git",
+    "tag": "0.1.0"
+  },
+  "platforms": {
+    "ios": "8.0",
+    "osx": "10.9",
+    "watchos": "2.0"
+  },
+  "source_files": "ErisKeys/Classes/**/*"
+}

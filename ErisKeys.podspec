@@ -9,7 +9,7 @@
 Pod::Spec.new do |s|
   s.name             = 'ErisKeys'
   s.version          = '0.1.0'
-  s.summary          = 'A short description of ErisKeys.'
+  s.summary          = 'Provides support to generate keys, sign and verify transactions on an Eris Blockchain.'
 
 # This description is used to generate tags and improve search results.
 #   * Think: What does it do? Why did you write it? What is the focus?
@@ -18,17 +18,20 @@ Pod::Spec.new do |s|
 #   * Finally, don't worry about the indent, CocoaPods strips it!
 
   s.description      = <<-DESC
-TODO: Add long description of the pod here.
+Provides support to generate keys, sign and verify transactions on an Eris Blockchain. Encapsulates CommonCrypto.
+
                        DESC
 
-  s.homepage         = 'https://github.com/<GITHUB_USERNAME>/ErisKeys'
+  s.homepage         = 'https://gitlab.com/katalysis/ErisKeys'
   # s.screenshots     = 'www.example.com/screenshots_1', 'www.example.com/screenshots_2'
-  s.license          = { :type => 'MIT', :file => 'LICENSE' }
-  s.author           = { 'Alex Tran Qui' => 'alex.tranqui@asymtech.eu' }
-  s.source           = { :git => 'https://github.com/<GITHUB_USERNAME>/ErisKeys.git', :tag => s.version.to_s }
+  s.license          = { :type => 'Apache License v2.0', :file => 'LICENSE' }
+  s.author           = { 'Alex Tran Qui' => 'alex@katalysis.io' }
+  s.source           = { :git => 'https://gitlab.com/katalysis/ErisKeys.git', :tag => s.version.to_s }
   # s.social_media_url = 'https://twitter.com/<TWITTER_USERNAME>'
 
   s.ios.deployment_target = '8.0'
+  s.osx.deployment_target = '10.9'
+  s.watchos.deployment_target = '2.0'
 
   s.source_files = 'ErisKeys/Classes/**/*'
   

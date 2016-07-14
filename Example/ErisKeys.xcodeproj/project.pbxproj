@@ -13,6 +13,7 @@
 		607FACDD1AFB9204008FA782 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 607FACDC1AFB9204008FA782 /* Images.xcassets */; };
 		607FACE01AFB9204008FA782 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 607FACDE1AFB9204008FA782 /* LaunchScreen.xib */; };
 		607FACEC1AFB9204008FA782 /* Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACEB1AFB9204008FA782 /* Tests.swift */; };
+		B6FC157D1D3838990069F6F1 /* _README.md in Sources */ = {isa = PBXBuildFile; fileRef = B6FC157C1D3838990069F6F1 /* _README.md */; };
 		B7A528444151944500223A30 /* Pods_ErisKeys_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 546B32EE3E9B696F14E46A82 /* Pods_ErisKeys_Tests.framework */; };
 		F46D29F1E5A072CA103D1E9C /* Pods_ErisKeys_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 83EA2CB49FAA30F6DCBD8BBA /* Pods_ErisKeys_Example.framework */; };
 /* End PBXBuildFile section */
@@ -46,6 +47,7 @@
 		6CC93FB163BDF72D3B4935ED /* ErisKeys.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = ErisKeys.podspec; path = ../ErisKeys.podspec; sourceTree = "<group>"; };
 		7DC4FA6E8DB1CC809940DDEC /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
 		83EA2CB49FAA30F6DCBD8BBA /* Pods_ErisKeys_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ErisKeys_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		B6FC157C1D3838990069F6F1 /* _README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = _README.md; sourceTree = "<group>"; };
 		DD4EE469CD2A31BE4B9F7DEE /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -141,6 +143,7 @@
 		607FACF51AFB993E008FA782 /* Podspec Metadata */ = {
 			isa = PBXGroup;
 			children = (
+				B6FC157C1D3838990069F6F1 /* _README.md */,
 				6CC93FB163BDF72D3B4935ED /* ErisKeys.podspec */,
 				DD4EE469CD2A31BE4B9F7DEE /* README.md */,
 				7DC4FA6E8DB1CC809940DDEC /* LICENSE */,
@@ -361,6 +364,7 @@
 			files = (
 				607FACD81AFB9204008FA782 /* ViewController.swift in Sources */,
 				607FACD61AFB9204008FA782 /* AppDelegate.swift in Sources */,
+				B6FC157D1D3838990069F6F1 /* _README.md in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
