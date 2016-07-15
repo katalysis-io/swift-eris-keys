@@ -15,13 +15,15 @@ This framework provides generation, signing and verification capabilities of the
 ./Classes/randomentropy
 
 
-
 Sample usage code in the playground.
-
-
-There are 2 universal targets for ios (ErisKeysUniversal and CommonCryptoUniversal)). They are both needed in order to use the ErisKeys framework.
-
-Currently, they will generate the frameworks in ${HOME}/Desktop/.
 
 For now, only iOS and macOS are supported. There are currently no tests.
 
+To install with cocoapods, please add the following source declarations:
+source 'https://github.com/CocoaPods/Specs.git' # for standard pods
+source 'https://gitlab.com/katalysis/Pods.git' # for katalysis pods
+
+and then:
+pod 'ErisKeys', '~> 0.1'
+
+in your Podfile.
