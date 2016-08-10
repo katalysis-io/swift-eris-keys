@@ -13,14 +13,14 @@
 import Foundation
 
 public struct RIPEMD {
-  public static func digest (input : NSData, bitlength:Int = 160) -> NSData {
+  public static func digest (_ input : Data, bitlength:Int = 160) -> Data {
     assert(bitlength == 160, "Only RIPEMD-160 is implemented")
     
     let paddedData = pad(input)
     
     var block = RIPEMD.Block()
     
-    for i in 0 ..< paddedData.length / 64 {
+    for i in 0 ..< paddedData.count / 64 {
       let part = getWordsInSection(paddedData, i)
       block.compress(part)
     }
@@ -32,12 +32,12 @@ public struct RIPEMD {
   // It then needs 8 bytes at the end where it writes the length (in bits, little endian).
   // If this doesn't fit it will add another block of 64 bytes.
   
-  private static func pad(data: NSData) -> NSData {
-    let paddedData = data.mutableCopy() as! NSMutableData
+  private static func pad(_ data: Data) -> Data {
+    let paddedData = (data as NSData).mutableCopy() as! NSMutableData
     
     // Put 0x80 after the last character:
     let stop: [UInt8] = [UInt8(0x80)] // 2^8
-    paddedData.appendBytes(stop, length: 1)
+    paddedData.append(stop, length: 1)
     
     // Pad with zeros until there are 64 * k - 8 bytes.
     var numberOfZerosToPad: Int;
@@ -51,34 +51,34 @@ public struct RIPEMD {
       numberOfZerosToPad = 56 + (64 - paddedData.length % 64)
     }
     
-    let zeroBytes = [UInt8](count: numberOfZerosToPad, repeatedValue: 0)
-    paddedData.appendBytes(zeroBytes, length: numberOfZerosToPad)
+    let zeroBytes = [UInt8](repeating: 0, count: numberOfZerosToPad)
+    paddedData.append(zeroBytes, length: numberOfZerosToPad)
     
     // Append length of message:
-    let length: UInt32 = UInt32(data.length) * 8
+    let length: UInt32 = UInt32(data.count) * 8
     let lengthBytes: [UInt32] = [length, UInt32(0x00_00_00_00)]
-    paddedData.appendBytes(lengthBytes, length: 8)
+    paddedData.append(lengthBytes, length: 8)
     
-    return paddedData as NSData
+    return paddedData as Data
   }
   
   // Takes an NSData object of length k * 64 bytes and returns an array of UInt32
   // representing 1 word (4 bytes) each. Each word is in little endian,
   // so "abcdefgh" is now "dcbahgfe".
-  private static func getWordsInSection(data: NSData, _ section: Int) -> [UInt32] {
+  private static func getWordsInSection(_ data: Data, _ section: Int) -> [UInt32] {
     let offset = section * 64
     
-    assert(data.length >= Int(offset + 64), "Data too short")
+    assert(data.count >= Int(offset + 64), "Data too short")
     
     var words: [UInt32] = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
-    data.getBytes(&words, range: NSMakeRange(offset, 64))
+    (data as NSData).getBytes(&words, range: NSMakeRange(offset, 64))
     
     
     return words
   }
   
-  private static func encodeWords(input: [UInt32]) -> NSData {
+  private static func encodeWords(_ input: [UInt32]) -> Data {
     let data = NSMutableData(bytes: input, length: 20)
-    return data
+    return data as Data
   }
 }

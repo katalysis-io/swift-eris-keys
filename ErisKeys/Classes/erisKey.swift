@@ -36,7 +36,7 @@ public class ErisKey {
     // Since the length of the public key is now fixed (to 32) and there is a single type encoded as 1, the added bytes are [0x1,0x1,0x20]
     // for all public addresses. See https://github.com/eris-ltd/eris-keys/blob/master/Godeps/_workspace/src/github.com/eris-ltd/tendermint/account/pub_key.go
     // for more details.
-    acct = RIPEMD.digest(NSData(bytes: [0x01,0x01,0x20] + pub, length: 35)).toHexString()!.uppercaseString
+    acct = RIPEMD.digest(NSData(bytes: [0x01,0x01,0x20] + pub, length: 35)).toHexString()!.uppercased()
   }
   
   public func pubKey() -> [byte] {
@@ -47,13 +47,13 @@ public class ErisKey {
     return acct
   }
   
-  public func sign(message: [byte]) -> [byte] {
-    return Sign(priv, message)
+  public func sign(_ message: [byte]) -> [byte] {
+    return Sign(message, priv)
   }
   
 }
 
-extension SequenceType where Generator.Element == UInt8 {
+extension Sequence where Iterator.Element == UInt8 {
   public func toString() -> String {
     var s = ""
     _ = self.map({s += String(format: "%02X",$0)})

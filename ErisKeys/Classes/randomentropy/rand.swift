@@ -31,11 +31,11 @@ final public class RAND {
   private static let NK:Int=21
   private static let NJ:Int=6
   private static let NV:Int=8
-  private var ira=[UInt32](count:NK,repeatedValue:0)
+  private var ira=[UInt32](repeating: 0,count: NK)
   private var rndptr:Int=0
   private var borrow:UInt32=0
   private var pool_ptr:Int=0
-  private var pool=[UInt8](count:32,repeatedValue:0)
+  private var pool=[UInt8](repeating: 0,count: 32)
   
   public func clean()
   {
@@ -67,7 +67,7 @@ final public class RAND {
     return ira[0]
   }
   
-  func sirand(seed: UInt32)
+  func sirand(_ seed: UInt32)
   {
     var m:UInt32=1
     var s:UInt32=seed
@@ -93,16 +93,16 @@ final public class RAND {
     pool_ptr=0
   }
   
-  private func pack(b: [UInt8]) -> UInt32
+  private func pack(_ b: [UInt8]) -> UInt32
   {
     return (UInt32(b[3])<<24)|(UInt32(b[2])<<16)|(UInt32(b[1])<<8)|(UInt32(b[0]))
   }
   
   /* Initialize RNG with some real entropy from some external source */
-  public func seed(rawlen: Int,_ raw: [UInt8])
+  public func seed(_ rawlen: Int,_ raw: [UInt8])
   { /* initialise from at least 128 byte string of raw random entropy */
     var digest=[UInt8]()
-    var b=[UInt8](count:4, repeatedValue:0)
+    var b=[UInt8](repeating: 0, count: 4)
     let sh=HASH()
     pool_ptr=0
     for i in 0..<RAND.NK {ira[i]=0}

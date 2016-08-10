@@ -12,17 +12,17 @@
 
 import Foundation
 
-extension NSData {
+extension Data {
   public func toHexString () -> String? {
 
-    let buffer = UnsafePointer<UInt8>(self.bytes)
+    let buffer = UnsafePointer<UInt8>((self as NSData).bytes)
     if buffer == nil {
       return nil
     }
     
     var hexadecimalString = ""
-    for i in 0..<self.length {
-      hexadecimalString += String(format: "%02x", buffer.advancedBy(i).memory)
+    for i in 0..<self.count {
+      hexadecimalString += String(format: "%02x", buffer.advancedBy(i).pointee)
     }
     return hexadecimalString
   }
@@ -38,14 +38,14 @@ extension String {
   ///
   /// - returns: NSData represented by this hexadecimal string.
   
-  func toNSData() -> NSData? {
+  func toNSData() -> Data? {
     let data = NSMutableData(capacity: characters.count / 2)
     
-    let regex = try! NSRegularExpression(pattern: "[0-9a-f]{1,2}", options: .CaseInsensitive)
-    regex.enumerateMatchesInString(self, options: [], range: NSMakeRange(0, characters.count)) { match, flags, stop in
-      let byteString = (self as NSString).substringWithRange(match!.range)
+    let regex = try! NSRegularExpression(pattern: "[0-9a-f]{1,2}", options: .caseInsensitive)
+    regex.enumerateMatches(in: self, options: [], range: NSMakeRange(0, characters.count)) { match, flags, stop in
+      let byteString = (self as NSString).substring(with: match!.range)
       let num = UInt8(byteString.withCString { strtoul($0, nil, 16) })
-      data?.appendBytes([num], length: 1)
+      data?.append([num], length: 1)
     }
     
     return data
@@ -55,9 +55,9 @@ extension String {
     //let data = NSMutableData(capacity: characters.count / 2)
     
     var array = [UInt8]()
-    let regex = try! NSRegularExpression(pattern: "[0-9a-f]{1,2}", options: .CaseInsensitive)
-    regex.enumerateMatchesInString(self, options: [], range: NSMakeRange(0, characters.count)) { match, flags, stop in
-      let byteString = (self as NSString).substringWithRange(match!.range)
+    let regex = try! NSRegularExpression(pattern: "[0-9a-f]{1,2}", options: .caseInsensitive)
+    regex.enumerateMatches(in: self, options: [], range: NSMakeRange(0, characters.count)) { match, flags, stop in
+      let byteString = (self as NSString).substring(with: match!.range)
       let num = UInt8(byteString.withCString { strtoul($0, nil, 16) })
       array.append(num)
     }

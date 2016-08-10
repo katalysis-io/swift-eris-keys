@@ -28,9 +28,9 @@
 
 final class HASH{
   
-  private var length=[UInt32](count:2,repeatedValue:0)
-  private var h=[UInt32](count:8,repeatedValue:0)
-  private var w=[UInt32](count:64,repeatedValue:0)
+  private var length=[UInt32](repeating: 0,count: 2)
+  private var h=[UInt32](repeating: 0,count: 8)
+  private var w=[UInt32](repeating: 0,count: 64)
   static let H0:UInt32=0x6A09E667
   static let H1:UInt32=0xBB67AE85
   static let H2:UInt32=0x3C6EF372
@@ -53,42 +53,42 @@ final class HASH{
     0x748f82ee,0x78a5636f,0x84c87814,0x8cc70208,0x90befffa,0xa4506ceb,0xbef9a3f7,0xc67178f2]
   
   
-  private static func S(n: UInt32,_ x: UInt32) -> UInt32
+  private static func S(_ n: UInt32,_ x: UInt32) -> UInt32
   {
     return ((x>>n)|(x<<(32-n)))
   }
   
-  private static func R(n: UInt32,_ x: UInt32) -> UInt32
+  private static func R(_ n: UInt32,_ x: UInt32) -> UInt32
   {
     return (x>>n)
   }
   
-  private static func Ch(x: UInt32,_ y: UInt32,_ z:UInt32) -> UInt32
+  private static func Ch(_ x: UInt32,_ y: UInt32,_ z:UInt32) -> UInt32
   {
     return ((x&y)^(~(x)&z))
   }
   
-  private static func Maj(x: UInt32,_ y: UInt32,_ z:UInt32) -> UInt32
+  private static func Maj(_ x: UInt32,_ y: UInt32,_ z:UInt32) -> UInt32
   {
     return ((x&y)^(x&z)^(y&z))
   }
   
-  private static func Sig0(x: UInt32) -> UInt32
+  private static func Sig0(_ x: UInt32) -> UInt32
   {
     return (S(2,x)^S(13,x)^S(22,x))
   }
   
-  private static func Sig1(x: UInt32) -> UInt32
+  private static func Sig1(_ x: UInt32) -> UInt32
   {
     return (S(6,x)^S(11,x)^S(25,x))
   }
   
-  private static func theta0(x: UInt32) -> UInt32
+  private static func theta0(_ x: UInt32) -> UInt32
   {
     return (S(7,x)^S(18,x)^R(3,x))
   }
   
-  private static func theta1(x: UInt32) -> UInt32
+  private static func theta1(_ x: UInt32) -> UInt32
   {
     return (S(17,x)^S(19,x)^R(10,x))
   }
@@ -140,7 +140,7 @@ final class HASH{
   }
   
   /* process a single byte */
-  func process(byt: UInt8)
+  func process(_ byt: UInt8)
   { /* process the next message byte */
     let cnt=Int((length[0]/32)%16)
     w[cnt]<<=8;
@@ -151,13 +151,13 @@ final class HASH{
   }
   
   /* process an array of bytes */
-  func process_array(b: [UInt8])
+  func process_array(_ b: [UInt8])
   {
     for i in 0..<b.count {process((b[i]))}
   }
   
   /* process a 32-bit integer */
-  func process_num(n:Int32)
+  func process_num(_ n:Int32)
   {
     process(UInt8((n>>24)&0xff))
     process(UInt8((n>>16)&0xff))
@@ -168,7 +168,7 @@ final class HASH{
   /* Generate 32-byte Hash */
   func hash() -> [UInt8]
   { /* pad message and finish - supply digest */
-    var digest=[UInt8](count:32,repeatedValue:0)
+    var digest=[UInt8](repeating: 0,count: 32)
     
     let len0=length[0]
     let len1=length[1]

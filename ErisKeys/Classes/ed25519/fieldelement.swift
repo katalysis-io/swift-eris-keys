@@ -29,34 +29,34 @@ import Foundation
 
 typealias FieldElement = [Int32]
 
-func FeZero(inout fe: FieldElement) {
+func FeZero(_ fe: inout FieldElement) {
   assert(fe.count == 10)
   for i in 0..<fe.count {
     fe[i] = 0
   }
 }
 
-func FeOne(inout fe: FieldElement) {
+func FeOne(_ fe: inout FieldElement) {
   assert(fe.count == 10)
   FeZero(&fe)
   fe[0] = 1
 }
 
-func FeAdd(inout dst: FieldElement,_  a: FieldElement, _ b: FieldElement) {
+func FeAdd(_ dst: inout FieldElement,_  a: FieldElement, _ b: FieldElement) {
   assert(dst.count == 10)
   for i in 0..<dst.count {
     dst[i] = a[i] + b[i]
   }
 }
 
-func FeSub(inout dst: FieldElement,_  a: FieldElement, _ b: FieldElement) {
+func FeSub(_ dst: inout FieldElement,_  a: FieldElement, _ b: FieldElement) {
   assert(dst.count == 10)
   for i in 0..<dst.count {
     dst[i] = a[i] - b[i]
   }
 }
 
-func FeCopy(inout dst: FieldElement, _ src: FieldElement) {
+func FeCopy(_ dst: inout FieldElement, _ src: FieldElement) {
   assert(dst.count == 10)
   for i in 0..<dst.count {
     dst[i] = src[i]
@@ -67,8 +67,8 @@ func FeCopy(inout dst: FieldElement, _ src: FieldElement) {
 // replace (f,g) with (f,g) if b == 0.
 //
 // Preconditions: b in {0,1}.
-func FeCMove(inout f: FieldElement, _ g: FieldElement, _ b: Int32) {
-  var x = FieldElement(count: 10, repeatedValue: 0)
+func FeCMove(_ f: inout FieldElement, _ g: FieldElement, _ b: Int32) {
+  var x = FieldElement(repeating: 0, count: 10)
   let c = -b
   for i in 0..<x.count {
     x[i] = c & (f[i] ^ g[i])
@@ -79,7 +79,7 @@ func FeCMove(inout f: FieldElement, _ g: FieldElement, _ b: Int32) {
   }
 }
 
-func load3(byteArray: [byte]) -> Int64 {
+func load3(_ byteArray: [byte]) -> Int64 {
   var r: Int64
   r = Int64(byteArray[0])
   r |= Int64(byteArray[1]) << 8
@@ -87,11 +87,11 @@ func load3(byteArray: [byte]) -> Int64 {
   return r
 }
 
-func load3(byteArraySlice: ArraySlice<byte>) -> Int64 {
+func load3(_ byteArraySlice: ArraySlice<byte>) -> Int64 {
   return load3(Array(byteArraySlice))
 }
 
-func load4(byteArray: [byte]) -> Int64 {
+func load4(_ byteArray: [byte]) -> Int64 {
   var r: Int64
   r = Int64(byteArray[0])
   r |= Int64(byteArray[1]) << 8
@@ -100,11 +100,11 @@ func load4(byteArray: [byte]) -> Int64 {
   return r
 }
 
-func load4(byteArraySlice: ArraySlice<byte>) -> Int64 {
+func load4(_ byteArraySlice: ArraySlice<byte>) -> Int64 {
   return load4(Array(byteArraySlice))
 }
 
-func FeFromBytes(inout dst: FieldElement, _ src: [byte]) {
+func FeFromBytes(_ dst: inout FieldElement, _ src: [byte]) {
   let last = src.count - 1
   var h0 = load4(src)
   var h1 = load3(src[4...last]) << 6
@@ -117,7 +117,7 @@ func FeFromBytes(inout dst: FieldElement, _ src: [byte]) {
   var h8 = load3(src[26...last]) << 4
   var h9 = (load3(src[29...last]) & 8388607) << 2
   
-  var carry = [Int64](count: 10, repeatedValue: 0)
+  var carry = [Int64](repeating: 0, count: 10)
   carry[9] = (h9 + 1<<24) >> 25
   h0 += carry[9] * 19
   h9 -= carry[9] << 25
@@ -185,8 +185,8 @@ func FeFromBytes(inout dst: FieldElement, _ src: [byte]) {
 //
 //   Have q+2^(-255)x = 2^(-255)(h + 19 2^(-25) h9 + 2^(-1))
 //   so floor(2^(-255)(h + 19 2^(-25) h9 + 2^(-1))) = q.
-func FeToBytes(inout s: [byte], _ h: FieldElement) {
-  var carry = [Int64](count: 10, repeatedValue: 0)
+func FeToBytes(_ s: inout [byte], _ h: FieldElement) {
+  var carry = [Int64](repeating: 0, count: 10)
 
   var h0 = Int64(h[0])
   var h1 = Int64(h[1])
@@ -286,14 +286,14 @@ func FeToBytes(inout s: [byte], _ h: FieldElement) {
   s[31] = byte(h9 >> 18 % 256)
 }
 
-func FeIsNegative(inout f: FieldElement) -> byte {
-  var s = [byte](count:32, repeatedValue: 0)
+func FeIsNegative(_ f: inout FieldElement) -> byte {
+  var s = [byte](repeating: 0, count: 32)
   FeToBytes(&s, f)
   return s[0] & 1
 }
 
-func FeIsNonZero(inout f: FieldElement) -> Int32 {
-  var s = [byte](count:32, repeatedValue: 0)
+func FeIsNonZero(_ f: inout FieldElement) -> Int32 {
+  var s = [byte](repeating: 0, count: 32)
   FeToBytes(&s, f)
   var x: UInt8 = 0
   for b in s {
@@ -312,7 +312,7 @@ func FeIsNonZero(inout f: FieldElement) -> Int32 {
 //
 // Postconditions:
 //    |h| bounded by 1.1*2^25,1.1*2^24,1.1*2^25,1.1*2^24,etc.
-func FeNeg(inout h: FieldElement, _ f: FieldElement) {
+func FeNeg(_ h: inout FieldElement, _ f: FieldElement) {
   for i in 0..<f.count {
     h[i] = -f[i]
   }
@@ -345,7 +345,7 @@ func FeNeg(inout h: FieldElement, _ f: FieldElement) {
 // Can get away with 11 carries, but then data flow is much deeper.
 //
 // With tighter constraints on inputs can squeeze carries into Int32.
-func FeMul(inout h: FieldElement, _ f: FieldElement, _ g: FieldElement) {
+func FeMul(_ h: inout FieldElement, _ f: FieldElement, _ g: FieldElement) {
   let f0 = f[0]
   let   f1 = f[1]
   let   f2 = f[2]
@@ -491,7 +491,7 @@ func FeMul(inout h: FieldElement, _ f: FieldElement, _ g: FieldElement) {
   var   h8 = f0g8 + f1g7_2 + f2g6 + f3g5_2 + f4g4 + f5g3_2 + f6g2 + f7g1_2 + f8g0 + f9g9_38
   var   h9 = f0g9 + f1g8 + f2g7 + f3g6 + f4g5 + f5g4 + f6g3 + f7g2 + f8g1 + f9g0
 
-  var carry = [Int64](count: 10, repeatedValue: 0)
+  var carry = [Int64](repeating: 0, count: 10)
   
   /*
 	  |h0| <= (1.1*1.1*2^52*(1+19+19+19+19)+1.1*1.1*2^50*(38+38+38+38+38))
@@ -586,7 +586,7 @@ func FeMul(inout h: FieldElement, _ f: FieldElement, _ g: FieldElement) {
 //
 // Postconditions:
 //    |h| bounded by 1.1*2^25,1.1*2^24,1.1*2^25,1.1*2^24,etc.
-func FeSquare(inout h: FieldElement,_ f: FieldElement) {
+func FeSquare(_ h: inout FieldElement,_ f: FieldElement) {
   let f0 = f[0]
   let f1 = f[1]
   let f2 = f[2]
@@ -676,7 +676,7 @@ func FeSquare(inout h: FieldElement,_ f: FieldElement) {
   var h8 = f0f8_2 + f1f7_4 + f2f6_2 + f3f5_4 + f4f4 + f9f9_38
   var h9 = f0f9_2 + f1f8_2 + f2f7_2 + f3f6_2 + f4f5_2
   
-  var carry = [Int64](count: 10, repeatedValue: 0)
+  var carry = [Int64](repeating: 0, count: 10)
   
   carry[0] = (h0 + (1 << 25)) >> 26
   h1 += carry[0]
@@ -743,7 +743,7 @@ func FeSquare(inout h: FieldElement,_ f: FieldElement) {
 // Postconditions:
 //    |h| bounded by 1.01*2^25,1.01*2^24,1.01*2^25,1.01*2^24,etc.
 // See fe_mul.c for discussion of implementation strategy.
-func FeSquare2(inout h: FieldElement, _ f: FieldElement) {
+func FeSquare2(_ h: inout FieldElement, _ f: FieldElement) {
   let f0 = f[0]
   let f1 = f[1]
   let f2 = f[2]
@@ -832,7 +832,7 @@ func FeSquare2(inout h: FieldElement, _ f: FieldElement) {
   var h7 = f0f7_2 + f1f6_2 + f2f5_2 + f3f4_2 + f8f9_38
   var h8 = f0f8_2 + f1f7_4 + f2f6_2 + f3f5_4 + f4f4 + f9f9_38
   var h9 = f0f9_2 + f1f8_2 + f2f7_2 + f3f6_2 + f4f5_2
-  var carry = [Int64](count: 10, repeatedValue: 0)
+  var carry = [Int64](repeating: 0, count: 10)
   
   h0 += h0
   h1 += h1
@@ -900,11 +900,11 @@ func FeSquare2(inout h: FieldElement, _ f: FieldElement) {
   h[9] = Int32(h9)
 }
 
-func FeInvert(inout out: FieldElement, _ z:FieldElement) {
-  var t0 = FieldElement(count:10, repeatedValue: 0)
-  var t1 = FieldElement(count:10, repeatedValue: 0)
-  var t2 = FieldElement(count:10, repeatedValue: 0)
-  var t3 = FieldElement(count:10, repeatedValue: 0)
+func FeInvert(_ out: inout FieldElement, _ z:FieldElement) {
+  var t0 = FieldElement(repeating: 0, count: 10)
+  var t1 = FieldElement(repeating: 0, count: 10)
+  var t2 = FieldElement(repeating: 0, count: 10)
+  var t3 = FieldElement(repeating: 0, count: 10)
   
   FeSquare(&t0, z)        // 2^1
   FeSquare(&t1, t0)      // 2^2
@@ -957,10 +957,10 @@ func FeInvert(inout out: FieldElement, _ z:FieldElement) {
   FeMul(&out, t1, t0) // 254..5,3,1,0
 }
 
-func fePow22523(inout out: FieldElement, _ z: FieldElement) {
-  var t0 = FieldElement(count:10, repeatedValue: 0)
-  var t1 = FieldElement(count:10, repeatedValue: 0)
-  var t2 = FieldElement(count:10, repeatedValue: 0)
+func fePow22523(_ out: inout FieldElement, _ z: FieldElement) {
+  var t0 = FieldElement(repeating: 0, count: 10)
+  var t1 = FieldElement(repeating: 0, count: 10)
+  var t2 = FieldElement(repeating: 0, count: 10)
   
   FeSquare(&t0, z)
   /* TODO: This is in the original code too, never executed. not sure if this is correct.

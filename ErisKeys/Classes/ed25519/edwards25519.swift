@@ -32,8 +32,8 @@
 
 import Foundation
 
-func geAdd(inout r: CompletedGroupElement, _ p: ExtendedGroupElement, _ q: CachedGroupElement) {
-    var t0 = FieldElement(count: 10,  repeatedValue: 0)
+func geAdd(_ r: inout CompletedGroupElement, _ p: ExtendedGroupElement, _ q: CachedGroupElement) {
+    var t0 = FieldElement(repeating: 0,  count: 10)
   
   FeAdd(&r.X, p.Y, p.X)
   FeSub(&r.Y, p.Y, p.X)
@@ -48,8 +48,8 @@ func geAdd(inout r: CompletedGroupElement, _ p: ExtendedGroupElement, _ q: Cache
   FeSub(&r.T, t0, r.T)
 }
 
-func geSub(inout r: CompletedGroupElement, _ p: ExtendedGroupElement, _ q: CachedGroupElement) {
-  var t0 = FieldElement(count: 10,  repeatedValue: 0)
+func geSub(_ r: inout CompletedGroupElement, _ p: ExtendedGroupElement, _ q: CachedGroupElement) {
+  var t0 = FieldElement(repeating: 0,  count: 10)
   
   FeAdd(&r.X, p.Y, p.X)
   FeSub(&r.Y, p.Y, p.X)
@@ -64,8 +64,8 @@ func geSub(inout r: CompletedGroupElement, _ p: ExtendedGroupElement, _ q: Cache
   FeAdd(&r.T, t0, r.T)
 }
 
-func geMixedAdd(inout r: CompletedGroupElement, _ p: ExtendedGroupElement, _ q: PreComputedGroupElement) {
-  var t0 = FieldElement(count: 10,  repeatedValue: 0)
+func geMixedAdd(_ r: inout CompletedGroupElement, _ p: ExtendedGroupElement, _ q: PreComputedGroupElement) {
+  var t0 = FieldElement(repeating: 0,  count: 10)
   
   FeAdd(&r.X, p.Y, p.X)
   FeSub(&r.Y, p.Y, p.X)
@@ -79,8 +79,8 @@ func geMixedAdd(inout r: CompletedGroupElement, _ p: ExtendedGroupElement, _ q: 
   FeSub(&r.T, t0, r.T)
 }
 
-func geMixedSub(inout r: CompletedGroupElement, _ p: ExtendedGroupElement, _ q: PreComputedGroupElement) {
-  var t0 = FieldElement(count: 10,  repeatedValue: 0)
+func geMixedSub(_ r: inout CompletedGroupElement, _ p: ExtendedGroupElement, _ q: PreComputedGroupElement) {
+  var t0 = FieldElement(repeating: 0,  count: 10)
   
   FeAdd(&r.X, p.Y, p.X)
   FeSub(&r.Y, p.Y, p.X)
@@ -94,7 +94,7 @@ func geMixedSub(inout r: CompletedGroupElement, _ p: ExtendedGroupElement, _ q: 
   FeAdd(&r.T, t0, r.T)
 }
 
-func slide(inout r: [Int8], _ a: [byte]) { // r.count == 256, a.count == 32
+func slide(_ r: inout [Int8], _ a: [byte]) { // r.count == 256, a.count == 32
   for i in 0..<256 {
     r[i] = Int8(1 & (a[i>>3] >> byte(i&7)))
   }
@@ -130,10 +130,10 @@ func slide(inout r: [Int8], _ a: [byte]) { // r.count == 256, a.count == 32
 // where a = a[0]+256*a[1]+...+256^31 a[31].
 // and b = b[0]+256*b[1]+...+256^31 b[31].
 // B is the Ed25519 base point (x,4/5) with x positive.
-func GeDoubleScalarMultVartime(inout r: ProjectiveGroupElement, _ a: [byte], _ A: ExtendedGroupElement, _ b: [byte]) { // a.count == b.count == 32
-  var aSlide = [Int8](count: 256, repeatedValue: 0)
-  var bSlide = [Int8](count: 256, repeatedValue: 0)
-  var Ai = [CachedGroupElement](count: 8, repeatedValue: CachedGroupElement()) // A,3A,5A,7A,9A,11A,13A,15A Ai.count == 8
+func GeDoubleScalarMultVartime(_ r: inout ProjectiveGroupElement, _ a: [byte], _ A: ExtendedGroupElement, _ b: [byte]) { // a.count == b.count == 32
+  var aSlide = [Int8](repeating: 0, count: 256)
+  var bSlide = [Int8](repeating: 0, count: 256)
+  var Ai = [CachedGroupElement](repeating: CachedGroupElement(), count: 8) // A,3A,5A,7A,9A,11A,13A,15A Ai.count == 8
   var t = CompletedGroupElement()
   var u =  ExtendedGroupElement()
   var A2 = ExtendedGroupElement()
@@ -186,7 +186,7 @@ func GeDoubleScalarMultVartime(inout r: ProjectiveGroupElement, _ a: [byte], _ A
 }
 
 // equal returns 1 if b == c and 0 otherwise.
-func equal(b: Int32, _ c: Int32) -> Int32 {
+func equal(_ b: Int32, _ c: Int32) -> Int32 {
   if (b==c) {
     return 1 }
   return 0
@@ -197,7 +197,7 @@ func equal(b: Int32, _ c: Int32) -> Int32 {
 }
 
 // negative returns 1 if b < 0 and 0 otherwise.
-func negative(b: Int32) -> Int32 {
+func negative(_ b: Int32) -> Int32 {
   if (b<0) {
     return 1 }
   return 0
@@ -207,13 +207,13 @@ func negative(b: Int32) -> Int32 {
  */
 }
 
-func PreComputedGroupElementCMove(inout t: PreComputedGroupElement, _ u: PreComputedGroupElement, _ b: Int32) {
+func PreComputedGroupElementCMove(_ t: inout PreComputedGroupElement, _ u: PreComputedGroupElement, _ b: Int32) {
   FeCMove(&t.yPlusX, u.yPlusX, b)
   FeCMove(&t.yMinusX, u.yMinusX, b)
   FeCMove(&t.xy2d, u.xy2d, b)
 }
 
-func selectPoint(inout t: PreComputedGroupElement, _ pos: Int32, _ b: Int32) {
+func selectPoint(_ t: inout PreComputedGroupElement, _ pos: Int32, _ b: Int32) {
   var minusT = PreComputedGroupElement()
   let bNegative = negative(b)
   let bAbs = b - (((-bNegative) & b) << 1)
@@ -234,8 +234,8 @@ func selectPoint(inout t: PreComputedGroupElement, _ pos: Int32, _ b: Int32) {
 //
 // Preconditions:
 //   a[31] <= 127
-func GeScalarMultBase(inout h: ExtendedGroupElement, _ a: [byte]) {
-  var e = [Int8](count: 64, repeatedValue: 0)
+func GeScalarMultBase(_ h: inout ExtendedGroupElement, _ a: [byte]) {
+  var e = [Int8](repeating: 0, count: 64)
   
   for i in 0..<a.count {
     e[2*i] = Int8(a[i] & 15)
@@ -290,7 +290,7 @@ func GeScalarMultBase(inout h: ExtendedGroupElement, _ a: [byte]) {
 // Output:
 //   s[0]+256*s[1]+...+256^31*s[31] = (ab+c) mod l
 //   where l = 2^252 + 27742317777372353535851937790883648493.
-func ScMulAdd(inout s: [byte],_ a: [byte],_ b: [byte], _ c: [byte]) {
+func ScMulAdd(_ s: inout [byte],_ a: [byte],_ b: [byte], _ c: [byte]) {
   let lasta = a.count - 1
   let a0 = 2097151 & load3(a)
   let a1 = 2097151 & (load4(a[2...lasta]) >> 5)
@@ -330,7 +330,7 @@ func ScMulAdd(inout s: [byte],_ a: [byte],_ b: [byte], _ c: [byte]) {
   let c9 = 2097151 & (load4(c[23...lastc]) >> 5)
   let c10 = 2097151 & (load3(c[26...lastc]) >> 2)
   let c11 = (load4(c[28...lastc]) >> 7)
-  var carry = [Int64](count: 23, repeatedValue: 0)
+  var carry = [Int64](repeating: 0, count: 23)
   
   var s0 = c0 + a0*b0
   var s1 = c1 + a0*b1 + a1*b0
@@ -724,7 +724,7 @@ func ScMulAdd(inout s: [byte],_ a: [byte],_ b: [byte], _ c: [byte]) {
 // Output:
 //   s[0]+256*s[1]+...+256^31*s[31] = s mod l
 //   where l = 2^252 + 27742317777372353535851937790883648493.
-func ScReduce(inout out: [byte], _ s: [byte]) {
+func ScReduce(_ out: inout [byte], _ s: [byte]) {
   let lasts = s.count - 1
   var s0 = 2097151 & load3(s)
   var s1 = 2097151 & (load4(s[2...lasts]) >> 5)
@@ -799,7 +799,7 @@ func ScReduce(inout out: [byte], _ s: [byte]) {
   s11 -= s18 * 683901
   s18 = 0
   
-  var carry = [Int64](count: 17, repeatedValue: 0)
+  var carry = [Int64](repeating: 0, count: 17)
   
   carry[6] = (s6 + (1 << 20)) >> 21
   s7 += carry[6]

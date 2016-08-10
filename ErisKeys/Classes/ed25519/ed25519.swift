@@ -36,16 +36,16 @@ public typealias byte = UInt8
 
 
 // GenerateKey generates a public/private key pair using a random array of 32 bytes
-func GenerateKey(rand32UInt8: [byte]) -> (publicKey: [byte], privateKey: [byte]) {
+func GenerateKey(_ rand32UInt8: [byte]) -> (publicKey: [byte], privateKey: [byte]) {
 	let publicKey = MakePublicKey(rand32UInt8)
 	return (publicKey,rand32UInt8+publicKey)
 }
 
 // MakePublicKey makes a publicKey from the first half of privateKey.
-func MakePublicKey(privateKeySeed: [byte]) -> [byte] {
-	var publicKey  = [byte](count: PublicKeySize, repeatedValue:0)
+func MakePublicKey(_ privateKeySeed: [byte]) -> [byte] {
+	var publicKey  = [byte](repeating: 0, count: PublicKeySize)
 
-  var digest = [UInt8](count:Int(CC_SHA512_DIGEST_LENGTH), repeatedValue: 0)
+  var digest = [UInt8](repeating: 0, count: Int(CC_SHA512_DIGEST_LENGTH))
   CC_SHA512(privateKeySeed, CC_LONG(privateKeySeed.count), &digest)
 
 	digest[0] &= 248
@@ -61,13 +61,13 @@ func MakePublicKey(privateKeySeed: [byte]) -> [byte] {
 }
 
 // Sign signs the message with privateKey and returns a signature.
-func Sign(privateKey: [byte], _ message: [byte]) -> [byte] {
+func Sign(_ privateKey: [byte], _ message: [byte]) -> [byte] {
 	let privateKeySeed = Array(privateKey[0..<32])
   
-  var digest1 = [UInt8](count:Int(CC_SHA512_DIGEST_LENGTH), repeatedValue: 0)
+  var digest1 = [UInt8](repeating: 0, count: Int(CC_SHA512_DIGEST_LENGTH))
   CC_SHA512(privateKeySeed, CC_LONG(privateKeySeed.count), &digest1)
   
-	var expandedSecretKey  = [byte](count: 32, repeatedValue:0)
+	var expandedSecretKey  = [byte](repeating: 0, count: 32)
   
   expandedSecretKey = Array(digest1[0..<32])
 	expandedSecretKey[0] &= 248
@@ -76,27 +76,27 @@ func Sign(privateKey: [byte], _ message: [byte]) -> [byte] {
 
 
   var data = Array(digest1[32..<64]) + message
-  var messageDigest = [UInt8](count:Int(CC_SHA512_DIGEST_LENGTH), repeatedValue: 0)
+  var messageDigest = [UInt8](repeating: 0, count: Int(CC_SHA512_DIGEST_LENGTH))
   CC_SHA512(data, CC_LONG(data.count), &messageDigest)
 
   
-	var messageDigestReduced  = [byte](count: 32, repeatedValue:0)
+	var messageDigestReduced  = [byte](repeating: 0, count: 32)
 	ScReduce(&messageDigestReduced, messageDigest)
   var R = ExtendedGroupElement()
   GeScalarMultBase(&R, messageDigestReduced)
 
-	var encodedR  = [byte](count: 32, repeatedValue:0)
+	var encodedR  = [byte](repeating: 0, count: 32)
 	R.ToBytes(&encodedR)
 
   data = encodedR + Array(privateKey[32..<64]) + message
-  var hramDigest = [UInt8](count:Int(CC_SHA512_DIGEST_LENGTH), repeatedValue: 0)
+  var hramDigest = [UInt8](repeating: 0, count: Int(CC_SHA512_DIGEST_LENGTH))
   CC_SHA512(data, CC_LONG(data.count), &hramDigest)
 
   
-	var hramDigestReduced  = [byte](count: 32, repeatedValue:0)
+	var hramDigestReduced  = [byte](repeating: 0, count: 32)
   ScReduce(&hramDigestReduced, hramDigest)
 
-	var s  = [byte](count: 32, repeatedValue:0)
+	var s  = [byte](repeating: 0, count: 32)
   ScMulAdd(&s, hramDigestReduced, expandedSecretKey, messageDigestReduced)
   
   let signature  = encodedR + s // should be 64 bytes
@@ -107,7 +107,7 @@ func Sign(privateKey: [byte], _ message: [byte]) -> [byte] {
 
 
 // Verify returns true iff sig is a valid signature of message by publicKey.
-public func Verify(publicKey: [byte], _ message: [byte], _ sig: [byte]) -> Bool {
+public func Verify(_ publicKey: [byte], _ message: [byte], _ sig: [byte]) -> Bool {
 	if sig[63]&224 != 0 {
 		return false
 	}
@@ -118,17 +118,17 @@ public func Verify(publicKey: [byte], _ message: [byte], _ sig: [byte]) -> Bool 
 	}
 
   let data = Array(sig[0..<32]) + publicKey + message
-  var digest = [UInt8](count:Int(CC_SHA512_DIGEST_LENGTH), repeatedValue: 0)
+  var digest = [UInt8](repeating: 0, count: Int(CC_SHA512_DIGEST_LENGTH))
   CC_SHA512(data, CC_LONG(data.count), &digest)
 
-	var hReduced = [byte](count: 32, repeatedValue:0)
+	var hReduced = [byte](repeating: 0, count: 32)
 	ScReduce(&hReduced, digest)
 
 	var R = ProjectiveGroupElement()
 	let b = Array(sig[32..<64])
 	GeDoubleScalarMultVartime(&R, hReduced, A, b)
 
-	var checkR  = [byte](count: 32, repeatedValue:0)
+	var checkR  = [byte](repeating: 0, count: 32)
 	R.ToBytes(&checkR)
   
   for i in 0..<32
