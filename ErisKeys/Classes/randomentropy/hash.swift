@@ -179,7 +179,9 @@ final class HASH{
     transform()
     for i in 0..<HASH.len
     { /* convert to bytes */
-      digest[i]=UInt8((h[i/4]>>(8*(3-UInt32(i)%4))) & 0xff);
+      let tmp = (8 * (3 - UInt32(i) % 4) )
+      digest[i]=UInt8((h[ i/4 ] >> tmp) & 0xff)
+      //digest[i]=UInt8((h[ i/4 ] >> (8* (3-UInt32(i)%4) )) & 0xff)
     }
     init_it();
     return digest;

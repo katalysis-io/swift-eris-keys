@@ -15,15 +15,8 @@ import Foundation
 extension Data {
   public func toHexString () -> String? {
 
-    let buffer = UnsafePointer<UInt8>((self as NSData).bytes)
-    if buffer == nil {
-      return nil
-    }
-    
     var hexadecimalString = ""
-    for i in 0..<self.count {
-      hexadecimalString += String(format: "%02x", buffer.advancedBy(i).pointee)
-    }
+    self.forEach {ui in hexadecimalString += String(format: "%02x", ui)}
     return hexadecimalString
   }
 }
@@ -38,14 +31,14 @@ extension String {
   ///
   /// - returns: NSData represented by this hexadecimal string.
   
-  func toNSData() -> Data? {
-    let data = NSMutableData(capacity: characters.count / 2)
+  func toData() -> Data? {
+    var data = Data(capacity: characters.count / 2)
     
     let regex = try! NSRegularExpression(pattern: "[0-9a-f]{1,2}", options: .caseInsensitive)
     regex.enumerateMatches(in: self, options: [], range: NSMakeRange(0, characters.count)) { match, flags, stop in
       let byteString = (self as NSString).substring(with: match!.range)
       let num = UInt8(byteString.withCString { strtoul($0, nil, 16) })
-      data?.append([num], length: 1)
+      data.append([num], count: 1)
     }
     
     return data
