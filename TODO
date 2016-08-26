@@ -1,5 +1,0 @@
-- add MacOS playground
-- add Linux target
-- add tests
-- this may also be needed: https://github.com/eris-ltd/eris-keys/blob/master/crypto/ed25519/extra25519/extra25519.go
-

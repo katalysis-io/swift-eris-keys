@@ -1,6 +1,0 @@
-framework module ErisKeys {
-  umbrella header "ErisKeys-umbrella.h"
-
-  export *
-  module * { export * }
-}
