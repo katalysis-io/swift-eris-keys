@@ -24,7 +24,7 @@ import Foundation
 import Ed25519
 import RipeMD
 
-public class ErisKey {
+open class ErisKey {
   let priv: [UInt8]
   let pub: [UInt8]
   let acct: String
@@ -37,18 +37,18 @@ public class ErisKey {
     // Since the length of the public key is now fixed (to 32) and there is a single type encoded as 1, the added bytes are [0x1,0x1,0x20]
     // for all public addresses. See https://github.com/eris-ltd/eris-keys/blob/master/Godeps/_workspace/src/github.com/eris-ltd/tendermint/account/pub_key.go
     // for more details.
-    acct = RIPEMD.digest(input: NSData(bytes: [0x01,0x01,0x20] + pub, length: 35)).toHexString()!.uppercased()
+    acct = RIPEMD.digest(Data(bytes: [0x01,0x01,0x20] + pub, count: 35)).toHexString()!.uppercased()
   }
   
-  public func pubKey() -> [UInt8] {
+  open func pubKey() -> [UInt8] {
     return pub
   }
 
-  public func account() -> String {
+  open func account() -> String {
     return acct
   }
   
-  public func sign(_ message: [UInt8]) -> [UInt8] {
+  open func sign(_ message: [UInt8]) -> [UInt8] {
     return Sign(priv, message)
   }
   
