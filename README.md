@@ -11,7 +11,19 @@ This framework provides generation, signing and verification capabilities of the
 
 Version: 0.3.1
 
-Usage:
+Usage: In a standard Swift Package Manager directory tree:
+in Package.swift:
+```swift
+import PackageDescription
+
+let package = Package(
+    name: "ErisKeysTest",
+    dependencies: [ .Package(url: "git@gitlab.com:katalysis/ErisKeys.git", majorVersion: 0, minor: 3),
+]
+)
+```
+
+in Sources/main.swift
 ```swift
 import Foundation
 import ErisKeys
