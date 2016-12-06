@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = "ErisKeys"
-  s.version          = "0.3.2"
+  s.version          = "0.3.3"
   s.summary          = "Keys capabilities for the Eris Blockchain in Swift."
   s.description  = <<-DESC
                    Keys generation, signature and verification capabilities for the Eris Blockchain in native Swift.
