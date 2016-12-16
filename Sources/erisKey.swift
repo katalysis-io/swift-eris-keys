@@ -24,14 +24,13 @@ import Foundation
 import Ed25519
 import RipeMD
 
-open class ErisKey {
-  let priv: [UInt8]
-  let pub: [UInt8]
-  let acct: String
+public class ErisKey {
+  fileprivate let priv: [UInt8]
+  fileprivate let pub: [UInt8]
+  fileprivate let acct: String
   
-  public init(seed: [UInt8])
+  public init(_ seed: [UInt8])
   {
-    
     (pub, priv) = GenerateKey(seed)
     // The calculation of the account address from the public key encodes a type and a length (for backkwards compatibility).
     // Since the length of the public key is now fixed (to 32) and there is a single type encoded as 1, the added bytes are [0x1,0x1,0x20]
@@ -40,24 +39,40 @@ open class ErisKey {
     acct = RIPEMD.digest(Data(bytes: [0x01,0x01,0x20] + pub, count: 35)).toHexString()!.uppercased()
   }
   
-  open func pubKey() -> [UInt8] {
-    return pub
-  }
-
-  open func account() -> String {
-    return acct
+  public var pubKey: [UInt8] {
+    get {
+      return pub
+    }
   }
   
-  open func sign(_ message: [UInt8]) -> [UInt8] {
+  public var account: String {
+    get {
+      return acct
+    }
+  }
+  
+  public func sign(_ message: [UInt8]) -> [UInt8] {
     return Sign(priv, message)
   }
   
+  public static func verify(_ publicKey: [UInt8], _ message: [UInt8], _ sig: [UInt8]) -> Bool {
+    return Verify(publicKey, message, sig)
+  }
 }
 
-extension Sequence where Iterator.Element == UInt8 {
-  public func toString() -> String {
+
+extension ErisKey {
+  public var pubKeyStr: String {
+    get {
+      var s = ""
+      _ = self.pub.map({s += String(format: "%02X",$0)})
+      return s    }
+  }
+
+  public func signAsStr(_ message: [UInt8]) -> String {
     var s = ""
-    _ = self.map({s += String(format: "%02X",$0)})
+    _ = Sign(priv, message).map({s += String(format: "%02X",$0)})
     return s
   }
 }
+
