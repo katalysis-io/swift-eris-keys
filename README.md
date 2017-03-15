@@ -55,4 +55,23 @@ Supported toolchain:
 Supported plaftorms:
 - macOS
 - Linux
-- for iOS support, please use version 0.1.0 (swift 2.2, cocoapods enabled)
+- iOS (Podfile)
+
+```
+source 'https://github.com/CocoaPods/Specs.git'
+source 'https://gitlab.com/katalysis/Pods.git'
+
+target 'ErisKeysApp' do
+  # Comment the next line if you're not using Swift and don't want to use dynamic frameworks
+  use_frameworks!
+
+  pod 'ErisKeys', '~> 0.3.5'
+
+  target 'ErisKeysAppTests' do
+    inherit! :search_paths
+    # Pods for testing
+  end
+
+end
+
+```
