@@ -36,7 +36,7 @@ public class ErisKey {
     // Since the length of the public key is now fixed (to 32) and there is a single type encoded as 1, the added bytes are [0x1,0x1,0x20]
     // for all public addresses. See https://github.com/eris-ltd/eris-keys/blob/master/Godeps/_workspace/src/github.com/eris-ltd/tendermint/account/pub_key.go
     // for more details.
-    acct = RIPEMD.digest(Data(bytes: [0x01,0x01,0x20] + pub, count: 35)).toHexString()!.uppercased()
+    acct = ErisKey.account(pub)
   }
   
   public var pubKey: [UInt8] {
@@ -58,6 +58,17 @@ public class ErisKey {
   public static func verify(_ publicKey: [UInt8], _ message: [UInt8], _ sig: [UInt8]) -> Bool {
     return Verify(publicKey, message, sig)
   }
+    
+    public static func account( _ publicKey: [UInt8]) -> String {
+        return RIPEMD.digest(Data(bytes: [0x01,0x01,0x20] + publicKey, count: 35)).toHexString()!.uppercased()
+    }
+    
+    public static func account( _ publicKey: String) -> String {
+        if let pub = publicKey.toByteArray() {
+        return RIPEMD.digest(Data(bytes: [0x01,0x01,0x20] + pub, count: 35)).toHexString()!.uppercased()
+        }
+        return ""
+    }
 }
 
 

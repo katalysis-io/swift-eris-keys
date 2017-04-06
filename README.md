@@ -10,7 +10,7 @@ This library is made possible by the work of the following people/teams:
 The source code and accompanying files are provided under the Apache v2 license (or respective license for prior work).
 This framework provides generation, signing and verification capabilities of the Eris Keys (ED25519/RipeMD160) in Swift.
 
-Version: 0.3.5
+Version: 0.3.6
 
 Usage: In a standard Swift Package Manager directory tree:
 in Package.swift:
@@ -65,7 +65,7 @@ target 'ErisKeysApp' do
   # Comment the next line if you're not using Swift and don't want to use dynamic frameworks
   use_frameworks!
 
-  pod 'ErisKeys', '~> 0.3.5'
+  pod 'ErisKeys', '~> 0.3.6'
 
   target 'ErisKeysAppTests' do
     inherit! :search_paths
