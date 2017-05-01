@@ -24,13 +24,28 @@ import Foundation
 import Ed25519
 import RipeMD
 
+public enum ErisKeyError : Error {
+    case WrongSeedSize
+}
+
+extension ErisKeyError: CustomStringConvertible {
+    public var description: String {
+        switch self {
+        case .WrongSeedSize:
+            return "WrongSeedSize"
+        }
+    }
+}
+
+
 public class ErisKey {
   fileprivate let priv: [UInt8]
   fileprivate let pub: [UInt8]
   fileprivate let acct: String
   
-  public init(_ seed: [UInt8])
+  public init(_ seed: [UInt8]) throws
   {
+    if (seed.count != 32) { throw ErisKeyError.WrongSeedSize }
     (pub, priv) = GenerateKey(seed)
     // The calculation of the account address from the public key encodes a type and a length (for backkwards compatibility).
     // Since the length of the public key is now fixed (to 32) and there is a single type encoded as 1, the added bytes are [0x1,0x1,0x20]

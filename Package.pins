@@ -10,13 +10,13 @@
     {
       "package": "Ed25519",
       "reason": null,
-      "repositoryURL": "git@gitlab.com:katalysis/Ed25519.git",
+      "repositoryURL": "https://gitlab.com/katalysis/Ed25519.git",
       "version": "0.1.4"
     },
     {
       "package": "RipeMD",
       "reason": null,
-      "repositoryURL": "git@gitlab.com:katalysis/RipeMD.git",
+      "repositoryURL": "https://gitlab.com/katalysis/RipeMD.git",
       "version": "0.1.2"
     }
   ],
