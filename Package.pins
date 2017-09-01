@@ -5,7 +5,7 @@
       "package": "CryptoSwift",
       "reason": null,
       "repositoryURL": "https://github.com/krzyzanowskim/CryptoSwift.git",
-      "version": "0.6.8"
+      "version": "0.6.9"
     },
     {
       "package": "Ed25519",
@@ -14,10 +14,16 @@
       "version": "0.1.4"
     },
     {
+      "package": "HexString",
+      "reason": null,
+      "repositoryURL": "https://gitlab.com/katalysis/HexString.git",
+      "version": "0.1.0"
+    },
+    {
       "package": "RipeMD",
       "reason": null,
       "repositoryURL": "https://gitlab.com/katalysis/RipeMD.git",
-      "version": "0.1.2"
+      "version": "0.1.4"
     }
   ],
   "version": 1

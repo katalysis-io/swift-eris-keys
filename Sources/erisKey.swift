@@ -23,6 +23,7 @@
 import Foundation
 import Ed25519
 import RipeMD
+import HexString
 
 public enum ErisKeyError : Error {
     case WrongSeedSize
