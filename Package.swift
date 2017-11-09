@@ -8,7 +8,7 @@ let package = Package(
     .library(name: "ErisKeys", targets: ["ErisKeys"])
     ],
   dependencies: [
-    .package(url: "https://gitlab.com/katalysis/Ed25519.git", .branch("swift-4")),
+    .package(url: "https://gitlab.com/katalysis/Ed25519.git", from: "0.2.0"),
     .package(url: "https://gitlab.com/katalysis/RipeMD.git", from: "0.1.0"),
     ],
   targets: [
