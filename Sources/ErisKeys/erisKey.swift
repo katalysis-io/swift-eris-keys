@@ -21,7 +21,7 @@
 //
 
 import Foundation
-import CryptoKit
+import Crypto
 import RipeMD
 import HexString
 
