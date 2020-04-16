@@ -14,11 +14,11 @@ let package = Package(
     .library(name: "ErisKeys", targets: ["ErisKeys"])
   ],
   dependencies: [
-    .package(url: "https://gitlab.com/katalysis/open-source/Ed25519.git", .upToNextMinor(from: "0.5.0")),
+    .package(url: "https://github.com/apple/swift-crypto.git", from: "1.0.0"),
     .package(url: "https://gitlab.com/katalysis/open-source/RipeMD.git", .upToNextMinor(from: "0.2.0")),
   ],
   targets: [
-    .target(name: "ErisKeys", dependencies: ["Ed25519", "RipeMD"]),
-    .testTarget(name: "ErisKeysTests", dependencies: ["ErisKeys", "Ed25519", "RipeMD"]),
+    .target(name: "ErisKeys", dependencies: [.product(name: "Crypto", package: "swift-crypto"), "RipeMD"]),
+    .testTarget(name: "ErisKeysTests", dependencies: ["ErisKeys", .product(name: "Crypto", package: "swift-crypto"), "RipeMD"]),
   ]
 )
