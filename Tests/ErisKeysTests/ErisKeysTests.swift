@@ -4,24 +4,22 @@ import XCTest
 class ErisKeysTests: XCTestCase {
     func testSignedMessage() {
         
-        guard let key = ErisKey(seed: "744D57D112D795F2C4CEBA22EEC09C9DC16FAFB0E7F737AB3CB50EC92F9C6581".toByteArray()!) else {
+        guard let key = ErisKey(seed: "AA5F6846072570B270F2C1F0BDA63C55DDDAE2567D33202523DECFA75FC6C39C".toByteArray()!) else {
             XCTAssert(false, "Problems creating key")
             return
         }
-        let pubKey: [UInt8] = "A940E6820B6CB783575B20F0109AF934726C521A12DDDB3D822141402C39C850C41510D45A95A8F9DC52309C47E113FE79595CCDC54F8E6F0137DDA68EEA0177".toByteArray()!
+        let pubKey: [UInt8] = "3D19628DF37B8F4479248909BC6570B266B067B765307631B7EF39EC076FAF44".toByteArray()!
         let account = ErisKey.account(pubKey)
         XCTAssertEqual(account, key.account)
         XCTAssertEqual(pubKey, key.pubKey)
-        let msgArray: [UInt8] = Array("""
-{"content":"e4c86e8e3a76434729b1bd03cd588765d11d2bb15e9b5f4408ff375c13c65dd0","participant":"A940E6820B6CB783575B20F0109AF934726C521A12DDDB3D822141402C39C850C41510D45A95A8F9DC52309C47E113FE79595CCDC54F8E6F0137DDA68EEA0177"}
-""".utf8)
+        let msgArray: [UInt8] = Array("Hello Marmots!".utf8)
         
         let s = key.sign(msgArray)
         print(s.reduce("", { (r, u) -> String in
             return r + String(format: "%02X", u)
         }))
         
-        let signed: [UInt8] = "26B0BB48F137FEA5732E2E42A685CEF42418FAEDB3C354036915D4B421318160560C0A00820DE282A75C91E06001742981BFB34FEEBF3603E16A3DE923D8786700".toByteArray()!
+        let signed: [UInt8] = "47AF2A262B059BC3F683492CE9E3072F3F730A8628707665F5B905367F5F08DA92262A1E4AAA7249F0E69A67B89FE0006F76892FE70397874CAC7B133A950C0F".toByteArray()!
         
         
         XCTAssertTrue(ErisKey.verify(pubKey, msgArray, s))
@@ -35,3 +33,11 @@ class ErisKeysTests: XCTestCase {
         ]
     }
 }
+
+
+// pub: fffd1f5f62c1b74554e3d2539
+// priv: 2cc3656517237784d27e4078e75fffd1f5f62c1b74554e3d2539
+
+
+//priv: 2a677c496b6c7e6862716c4b754375337a669714d2d7d75336260a2b1d
+//pub: 754375337a669714d2d7d75336260a2b1d

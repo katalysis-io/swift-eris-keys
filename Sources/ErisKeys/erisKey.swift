@@ -113,3 +113,62 @@ extension ErisKey {
     }
 }
 
+
+
+public class ErisKey2 {
+    fileprivate let priv: [UInt8]
+    fileprivate let pub: [UInt8]
+    fileprivate let acct: String
+    
+    
+    
+    public init(_ seed: [UInt8]) throws
+    {
+        if (seed.count != 32) { throw ErisKeyError.WrongSeedSize }
+        (pub, priv) = GenerateKey(seed)
+        // The calculation of the account address from the public key encodes a type and a length (for backkwards compatibility).
+        // Since the length of the public key is now fixed (to 32) and there is a single type encoded as 1, the added bytes are [0x1,0x1,0x20]
+        // for all public addresses. See https://github.com/eris-ltd/eris-keys/blob/master/Godeps/_workspace/src/github.com/eris-ltd/tendermint/account/pub_key.go
+        // for more details.
+        acct = ErisKey.account(pub)
+    }
+    
+    public convenience init?(seed: [UInt8]) {
+        do {
+            try self.init(seed)
+        } catch {
+            return nil
+        }
+    }
+    
+    public var pubKey: [UInt8] {
+        get {
+            return pub
+        }
+    }
+    
+    public var account: String {
+        get {
+            return acct
+        }
+    }
+    
+    public func sign(_ message: [UInt8]) -> [UInt8] {
+        return Sign(priv, message)
+    }
+    
+    public static func verify(_ publicKey: [UInt8], _ message: [UInt8], _ sig: [UInt8]) -> Bool {
+        return Verify(publicKey, message, sig)
+    }
+    
+    public static func account( _ publicKey: [UInt8]) -> String {
+        return RIPEMD.digest(Data(bytes: [0x01,0x01,0x20] + publicKey, count: 35)).toHexString()!.uppercased()
+    }
+    
+    public static func account( _ publicKey: String) -> String {
+        if let pub = publicKey.toByteArray() {
+            return RIPEMD.digest(Data(bytes: [0x01,0x01,0x20] + pub, count: 35)).toHexString()!.uppercased()
+        }
+        return ""
+    }
+}
