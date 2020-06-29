@@ -18,7 +18,7 @@ let package = Package(
     .package(url: "https://github.com/katalysis-io/swift-ripemd.git", .upToNextMinor(from: "0.3.0")),
   ],
   targets: [
-    .target(name: "ErisKeys", dependencies: [.product(name: "Crypto", package: "swift-crypto"), "RipeMD"]),
-    .testTarget(name: "ErisKeysTests", dependencies: ["ErisKeys", .product(name: "Crypto", package: "swift-crypto"), "RipeMD"]),
+    .target(name: "ErisKeys", dependencies: [.product(name: "Crypto", package: "swift-crypto"), .product(name: "Crypto", package: "RipeMD")]),
+    .testTarget(name: "ErisKeysTests", dependencies: ["ErisKeys", .product(name: "Crypto", package: "swift-crypto"), .product(name: "Crypto", package: "RipeMD")]),
   ]
 )
