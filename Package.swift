@@ -15,10 +15,11 @@ let package = Package(
   ],
   dependencies: [
     .package(url: "https://github.com/apple/swift-crypto.git", from: "1.0.0"),
-    .package(url: "https://github.com/katalysis-io/swift-ripemd.git", .upToNextMinor(from: "0.3.0")),
+    .package(name: "RipeMD", url: "https://github.com/katalysis-io/swift-ripemd.git", .upToNextMinor(from: "0.4.0")),
+    .package(name: "HexString", url: "https://github.com/katalysis-io/swift-hex-string.git", from: "0.4.0"),
   ],
   targets: [
-    .target(name: "ErisKeys", dependencies: [.product(name: "Crypto", package: "swift-crypto"), .product(name: "Crypto", package: "RipeMD")]),
-    .testTarget(name: "ErisKeysTests", dependencies: ["ErisKeys", .product(name: "Crypto", package: "swift-crypto"), .product(name: "Crypto", package: "RipeMD")]),
+    .target(name: "ErisKeys", dependencies: [.product(name: "Crypto", package: "swift-crypto"), "RipeMD", "HexString"]),
+    .testTarget(name: "ErisKeysTests", dependencies: ["ErisKeys"]),
   ]
 )
